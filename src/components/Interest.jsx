@@ -12,10 +12,10 @@ import {
   Waves,
   LayoutDashboard,
 } from "lucide-react";
-
+import { useNavigate } from "react-router";
 export default function Interest({ onBack }) {
   const [selectedInterests, setSelectedInterests] = useState([]);
-
+  const navigate = useNavigate();
   const interests = [
     { label: "Movie", icon: Film },
     { label: "Snooker", icon: Gamepad2 },
@@ -38,7 +38,9 @@ export default function Interest({ onBack }) {
   };
 
   const isSelected = (interest) => selectedInterests.includes(interest);
-
+  const handleSearch = () => {
+    navigate("/search");
+  };
   return (
     <div className="flex flex-col min-h-screen bg-white px-4 py-6">
       <div className="mb-4">
@@ -83,6 +85,7 @@ export default function Interest({ onBack }) {
 
       <div className="w-full max-w-md mx-auto px-1 pt-4">
         <button
+          onClick={handleSearch}
           className="w-full py-3 bg-pink-500 text-white border-none rounded-3xl text-base font-semibold transition-colors hover:bg-pink-600 cursor-pointer disabled:bg-gray-300  disabled:text-gray-500 disabled:cursor-not-allowed"
           disabled={selectedInterests.length === 0}
         >
