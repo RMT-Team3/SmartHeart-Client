@@ -43,8 +43,8 @@ export default function Profile() {
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
-            src={dummy2}
-            alt="John Doe"
+            src={user?.imageUrl || dummy2} // Use user image or fallback to dummy image
+            alt={user?.name || "User"}
             className="w-full h-[380px] object-cover rounded-b-3xl"
           />
         </div>

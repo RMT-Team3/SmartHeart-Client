@@ -20,8 +20,10 @@ export default function Match() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
+      // ini nanti jadi /chat/id (pake roomId)
       navigate("/chat");
     } catch (error) {
+      // ini walaupun error tetep ke chat berdasarkan roomId
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -32,13 +34,6 @@ export default function Match() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-6 left-4 z-10"
-      >
-        <ChevronLeft className="w-6 h-6 text-white" />
-      </button>
-
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
@@ -84,8 +79,6 @@ export default function Match() {
             </div>
           </div>
           <div className="h-px bg-gray-200 w-full mb-6"></div>
-
-          {/* Interests section */}
           <div>
             <h2 className="text-lg font-semibold text-black mb-4">
               AI Insight
