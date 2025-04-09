@@ -66,13 +66,13 @@ export default function ProfilePage() {
           {/* Interests section */}
           <div>
             <h2 className="text-lg font-semibold text-black mb-4">Interest</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {interests.map((interest) => {
                 const IconComponent = interest.icon;
                 return (
                   <div
                     key={interest.label}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm bg-pink-100 text-pink-600"
+                    className="text-sm flex items-center gap-2 px-4 py-2 rounded-full  bg-pink-100 text-pink-600"
                   >
                     <IconComponent className="w-4 h-4" />
                     {interest.label}

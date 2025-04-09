@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
+import dummy from "../assets/dummy.jpg"; // Import the dummy image
 
 export default function Chat() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const messages = [
     {
-      id: 3,
+      id: 1,
       sender: "them",
-      text: "Do you want startucks? 😊",
+      text: "Do you want starbucks? 😊",
     },
     {
-      id: 4,
+      id: 2,
       sender: "you",
-      text: "Would you be awesome!",
+      text: "That would be awesome!",
     },
   ];
   const handleLogout = () => {
@@ -34,8 +35,9 @@ export default function Chat() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <img
-              src=""
-              className="w-10 h-10 rounded-full bg-pink-300 flex items-center justify-center text-white font-bold"
+              src={dummy}
+              alt="User"
+              className="w-10 h-10 rounded-full object-cover bg-pink-300 flex items-center justify-center text-white font-bold"
             />
 
             <div>
