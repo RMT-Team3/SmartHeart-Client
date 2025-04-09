@@ -56,7 +56,7 @@ export default function Description({ onNext }) {
             />
           </div>
 
-          <div>
+          <div className="mt-6">
             <label
               htmlFor="text"
               className="block mb-2 text-sm font-medium text-gray-900"

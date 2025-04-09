@@ -23,7 +23,18 @@ export default function Login() {
         text: "You are logged in!",
       });
       localStorage.setItem("access_token", data.access_token);
-      navigate("/about");
+      const user = await http({
+        method: "GET",
+        url: "/profile",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      if (user.data.personalities) {
+        navigate("/profile");
+      } else {
+        navigate("/about");
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
