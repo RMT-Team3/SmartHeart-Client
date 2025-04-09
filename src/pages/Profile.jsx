@@ -7,12 +7,12 @@ import {
   ChefHat,
   Gamepad2,
   LayoutDashboard,
-  Venus,
+  Mars,
 } from "lucide-react";
 import { useNavigate } from "react-router";
-import dummy from "../assets/dummy.jpg";
+import dummy2 from "../assets/dummy2.jpg";
 
-export default function Match() {
+export default function Profile() {
   const navigate = useNavigate();
   const interests = [
     { label: "Gaming", icon: Gamepad2 },
@@ -22,9 +22,11 @@ export default function Match() {
     { label: "Music", icon: Music },
     { label: "Cooking", icon: ChefHat },
   ];
+  function handleSearch() {
+    navigate("/search");
+  }
   function handleChat() {
     navigate("/chat");
-    // Tembak bikin room di backend
   }
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -38,23 +40,23 @@ export default function Match() {
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
-            src={dummy}
-            alt="Perry Kate"
+            src={dummy2}
+            alt="John Doe"
             className="w-full h-[380px] object-cover rounded-b-3xl"
           />
         </div>
 
         <div className="px-6 pt-4">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-black">Perry Kate</h1>
+            <h1 className="text-2xl font-bold text-black">John Doe</h1>
             <p className="text-gray-500 flex items-center gap-1">
-              <Venus className="w-4 h-4" /> Female
+              <Mars className="w-4 h-4" /> Male
             </p>
           </div>
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-black mb-2">About</h2>
+            <h2 className="text-lg font-semibold text-black mb-2">About You</h2>
             <p className="text-gray-700 mb-2">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Dignissimos ut quas illo distinctio reprehenderit temporibus
@@ -84,11 +86,20 @@ export default function Match() {
           </div>
 
           <div className="mt-6">
+            {/* Kalau foundmatch=true d, button findMatch dihide */}
+            <button
+              onClick={handleSearch}
+              className="w-full py-3 rounded-3xl text-base font-semibold transition-colors cursor-pointer bg-pink-500 text-white hover:bg-pink-600"
+            >
+              Find your Match!
+            </button>
+          </div>
+          <div className="mt-6">
             <button
               onClick={handleChat}
-              className="w-full py-3 rounded-3xl text-base font-semibold transition-colors mb-4 cursor-pointer bg-pink-500 text-white hover:bg-pink-600"
+              className="w-full py-3 rounded-3xl text-base font-semibold transition-colors mb-4 cursor-pointer border border-pink-500 text-pink-500 hover:text-white hover:bg-pink-600"
             >
-              Chat Now
+              See Your Chat
             </button>
           </div>
         </div>
