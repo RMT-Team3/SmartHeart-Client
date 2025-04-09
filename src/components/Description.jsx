@@ -19,7 +19,6 @@ export default function Description({ onNext }) {
       onNext({ imageUrl, description });
     }
   };
-
   return (
     <div className="flex flex-col min-h-screen bg-white px-4 py-6">
       <div className="mb-4">

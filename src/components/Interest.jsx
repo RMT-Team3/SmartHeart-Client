@@ -12,14 +12,15 @@ import {
   Waves,
   LayoutDashboard,
 } from "lucide-react";
+// kirim put user untuk personality dsb => nembak gemini => dapet user
 import { useNavigate } from "react-router";
 export default function Interest({ onBack }) {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const navigate = useNavigate();
   const interests = [
     { label: "Movie", icon: Film },
-    { label: "Snooker", icon: Gamepad2 },
-    { label: "Books Reading", icon: BookOpen },
+    { label: "Gaming", icon: Gamepad2 },
+    { label: "Reading", icon: BookOpen },
     { label: "Swimming", icon: Waves },
     { label: "Design", icon: LayoutDashboard },
     { label: "Photography", icon: Camera },
@@ -38,8 +39,9 @@ export default function Interest({ onBack }) {
   };
 
   const isSelected = (interest) => selectedInterests.includes(interest);
-  const handleSearch = () => {
-    navigate("/search");
+  const handleSubmit = () => {
+    console.log("Selected Interests:", selectedInterests);
+    navigate("/profile");
   };
   return (
     <div className="flex flex-col min-h-screen bg-white px-4 py-6">
@@ -85,11 +87,11 @@ export default function Interest({ onBack }) {
 
       <div className="w-full max-w-md mx-auto px-1 pt-4">
         <button
-          onClick={handleSearch}
+          onClick={handleSubmit}
           className="w-full py-3 bg-pink-500 text-white border-none rounded-3xl text-base font-semibold transition-colors hover:bg-pink-600 cursor-pointer disabled:bg-gray-300  disabled:text-gray-500 disabled:cursor-not-allowed"
           disabled={selectedInterests.length === 0}
         >
-          Find your Match!
+          Submit
         </button>
       </div>
     </div>
