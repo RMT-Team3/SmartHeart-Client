@@ -75,18 +75,6 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 -mt-2.5 text-gray-500">
-              Don't have an account?{" "}
-              <button
-                onClick={() => navigate("/register")}
-                className="text-pink-500 underline hover:text-pink-600"
-              >
-                Register here
-              </button>
-            </span>
-          </div>
-
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -117,6 +105,17 @@ export default function Login() {
             </svg>
             Google
           </button>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-white px-2 -mt-2.5 text-gray-500">
+              Don't have an account?{" "}
+              <button
+                onClick={() => navigate("/register")}
+                className="text-pink-500 underline cursor-pointer hover:text-pink-600"
+              >
+                Register here
+              </button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
