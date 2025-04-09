@@ -33,20 +33,20 @@ export default function Gender({ onNext, onBack }) {
           <div className="flex flex-col gap-6 items-center mt-24">
             <div
               className={`w-52 h-52 rounded-xl border-2 flex flex-col items-center justify-center cursor-pointer transition-all ${
-                isSelected("male")
+                isSelected("Male")
                   ? "border-pink-400 bg-pink-50"
                   : "border-gray-200 bg-white"
               }`}
-              onClick={() => handleSelect("male")}
+              onClick={() => handleSelect("Male")}
             >
               <Mars
                 className={`w-10 h-10 mb-2 ${
-                  isSelected("male") ? "text-pink-500" : "text-gray-700"
+                  isSelected("Male") ? "text-pink-500" : "text-gray-700"
                 }`}
               />
               <span
                 className={`font-medium ${
-                  isSelected("male") ? "text-pink-500" : "text-gray-700"
+                  isSelected("Male") ? "text-pink-500" : "text-gray-700"
                 }`}
               >
                 Male
@@ -55,20 +55,20 @@ export default function Gender({ onNext, onBack }) {
 
             <div
               className={`w-52 h-52 rounded-xl border-2 flex flex-col items-center justify-center cursor-pointer transition-all ${
-                isSelected("female")
+                isSelected("Female")
                   ? "border-pink-400 bg-pink-50"
                   : "border-gray-200 bg-white"
               }`}
-              onClick={() => handleSelect("female")}
+              onClick={() => handleSelect("Female")}
             >
               <Venus
                 className={`w-10 h-10 mb-2 ${
-                  isSelected("female") ? "text-pink-500" : "text-gray-700"
+                  isSelected("Female") ? "text-pink-500" : "text-gray-700"
                 }`}
               />
               <span
                 className={`font-medium ${
-                  isSelected("female") ? "text-pink-500" : "text-gray-700"
+                  isSelected("Female") ? "text-pink-500" : "text-gray-700"
                 }`}
               >
                 Female

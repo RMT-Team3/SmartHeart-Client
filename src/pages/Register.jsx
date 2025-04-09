@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
-
+import http from "../http";
+import Swal from "sweetalert2";
 export default function Register() {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    navigate("/login");
+    try {
+      await http({
+        method: "POST",
+        url: "/register",
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
+      });
+      Swal.fire({
+        icon: "success",
+        text: "Account created!",
+      });
+      navigate("/login");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message,
+      });
+    }
   }
 
   return (
@@ -44,14 +69,16 @@ export default function Register() {
             <div className="grid gap-6 mb-3">
               <div>
                 <label
-                  htmlFor="first_name"
+                  htmlFor="full_name"
                   className="block mb-2 text-sm font-medium text-gray-900 "
                 >
                   Full name
                 </label>
                 <input
                   type="text"
-                  id="first_name"
+                  id="full_name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 outline-none transition-all"
                   placeholder="John Doe"
                 />
@@ -67,6 +94,8 @@ export default function Register() {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 outline-none transition-all"
                 placeholder="your@email.com"
               />
@@ -81,6 +110,8 @@ export default function Register() {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 outline-none transition-all"
                 placeholder="•••••••••"
               />

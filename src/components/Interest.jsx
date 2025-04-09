@@ -12,11 +12,9 @@ import {
   Waves,
   LayoutDashboard,
 } from "lucide-react";
-// kirim put user untuk personality dsb => nembak gemini => dapet user
-import { useNavigate } from "react-router";
-export default function Interest({ onBack }) {
-  const [selectedInterests, setSelectedInterests] = useState([]);
-  const navigate = useNavigate();
+
+export default function Interest({ onBack, onSubmit }) {
+  const [selectedInterests, setSelectedInterests] = useState(""); // Initialize as a string
   const interests = [
     { label: "Movie", icon: Film },
     { label: "Gaming", icon: Gamepad2 },
@@ -31,17 +29,31 @@ export default function Interest({ onBack }) {
   ];
 
   const toggleInterest = (interest) => {
-    setSelectedInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((item) => item !== interest)
-        : [...prev, interest]
-    );
+    const interestsArray = selectedInterests
+      ? selectedInterests.split(",")
+      : [];
+    if (interestsArray.includes(interest)) {
+      const updatedInterests = interestsArray.filter(
+        (item) => item !== interest
+      );
+      setSelectedInterests(updatedInterests.join(","));
+    } else {
+      const updatedInterests = [...interestsArray, interest];
+      setSelectedInterests(updatedInterests.join(","));
+    }
   };
 
-  const isSelected = (interest) => selectedInterests.includes(interest);
+  const isSelected = (interest) => {
+    const interestsArray = selectedInterests
+      ? selectedInterests.split(",")
+      : [];
+    return interestsArray.includes(interest);
+  };
+
   const handleSubmit = () => {
-    console.log("Selected Interests:", selectedInterests);
-    navigate("/profile");
+    if (onSubmit) {
+      onSubmit(selectedInterests);
+    }
   };
   return (
     <div className="flex flex-col min-h-screen bg-white px-4 py-6">
@@ -58,8 +70,8 @@ export default function Interest({ onBack }) {
               Select your Interest
             </h1>
             <p className="text-sm text-gray-400">
-              Select a few of your interest to match with users who have similar
-              things in common.
+              Select a few of your interests to match with users who have
+              similar things in common.
             </p>
           </div>
 
