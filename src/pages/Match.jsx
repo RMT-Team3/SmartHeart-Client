@@ -1,31 +1,35 @@
 import React from "react";
-import {
-  ChevronLeft,
-  BookOpen,
-  Music,
-  Camera,
-  ChefHat,
-  Gamepad2,
-  LayoutDashboard,
-  Venus,
-} from "lucide-react";
+import { ChevronLeft, Venus, Mars } from "lucide-react";
 import { useNavigate } from "react-router";
 import dummy from "../assets/dummy.jpg";
+import { useLocation } from "react-router";
+import http from "../http";
+import Swal from "sweetalert2";
 
 export default function Match() {
+  const location = useLocation();
+  const matchData = location.state?.matchData;
   const navigate = useNavigate();
-  const interests = [
-    { label: "Gaming", icon: Gamepad2 },
-    { label: "Reading", icon: BookOpen },
-    { label: "Photography", icon: Camera },
-    { label: "Design", icon: LayoutDashboard },
-    { label: "Music", icon: Music },
-    { label: "Cooking", icon: ChefHat },
-  ];
-  function handleChat() {
-    navigate("/chat");
-    // Tembak bikin room di backend
+  console.log(matchData);
+  async function handleChat() {
+    try {
+      await http({
+        method: "POST",
+        url: "/rooms",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      navigate("/chat");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || "Something went wrong!",
+      });
+    }
   }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <button
@@ -38,7 +42,7 @@ export default function Match() {
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
-            src={dummy}
+            src={matchData?.imageUrl || dummy}
             alt="Perry Kate"
             className="w-full h-[380px] object-cover rounded-b-3xl"
           />
@@ -46,41 +50,47 @@ export default function Match() {
 
         <div className="px-6 pt-4">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-black">Perry Kate</h1>
+            <h1 className="text-2xl font-bold text-black">{matchData?.name}</h1>
             <p className="text-gray-500 flex items-center gap-1">
-              <Venus className="w-4 h-4" /> Female
+              {matchData?.gender === "Male" ? (
+                <Mars className="w-4 h-4" />
+              ) : (
+                <Venus className="w-4 h-4" />
+              )}{" "}
+              {matchData?.gender}
             </p>
           </div>
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-black mb-2">About</h2>
-            <p className="text-gray-700 mb-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Dignissimos ut quas illo distinctio reprehenderit temporibus
-              numquam tempore ullam placeat quam.
-            </p>
+            <p className="text-gray-700 mb-2">{matchData?.personalities}</p>
           </div>
 
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
           {/* Interests section */}
-          <div>
+          <div className="mb-4">
             <h2 className="text-lg font-semibold text-black mb-4">Interest</h2>
             <div className="grid grid-cols-2 gap-2">
-              {interests.map((interest) => {
-                const IconComponent = interest.icon;
-                return (
-                  <div
-                    key={interest.label}
-                    className="text-sm flex items-center gap-2 px-4 py-2 rounded-full  bg-pink-100 text-pink-600"
-                  >
-                    <IconComponent className="w-4 h-4" />
-                    {interest.label}
-                  </div>
-                );
-              })}
+              {matchData?.interests?.map((interest, index) => (
+                <div
+                  key={index}
+                  className="text-sm flex items-center justify-center px-4 py-2 rounded-full bg-pink-100 text-pink-600"
+                >
+                  {interest}
+                </div>
+              ))}
             </div>
+          </div>
+          <div className="h-px bg-gray-200 w-full mb-6"></div>
+
+          {/* Interests section */}
+          <div>
+            <h2 className="text-lg font-semibold text-black mb-4">
+              AI Insight
+            </h2>
+            <p>{matchData?.message}</p>
           </div>
 
           <div className="mt-6">

@@ -1,12 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import http from "../http";
+import Swal from "sweetalert2";
 
 export default function Login() {
   const navigate = useNavigate();
-  function handleSubmit(event) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  async function handleSubmit(event) {
     event.preventDefault();
-    localStorage.setItem("access_token", "your_access_token");
-    navigate("/about");
+    try {
+      const { data } = await http({
+        method: "POST",
+        url: "/login",
+        data: {
+          email: email,
+          password: password,
+        },
+      });
+      Swal.fire({
+        icon: "success",
+        text: "You are logged in!",
+      });
+      localStorage.setItem("access_token", data.access_token);
+      const user = await http({
+        method: "GET",
+        url: "/profile",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      if (user.data.personalities) {
+        navigate("/profile");
+      } else {
+        navigate("/about");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message,
+      });
+    }
   }
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
@@ -48,6 +83,8 @@ export default function Login() {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 outline-none transition-all"
                 placeholder="your@email.com"
               />
@@ -62,6 +99,8 @@ export default function Login() {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 outline-none transition-all"
                 placeholder="•••••••••"
               />

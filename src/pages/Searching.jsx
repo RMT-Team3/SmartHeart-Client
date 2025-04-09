@@ -1,15 +1,36 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
+import http from "../http";
+import Swal from "sweetalert2";
 
 export default function Searching() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/match");
-    }, 5000);
+    async function fetchData() {
+      try {
+        const { data } = await http({
+          method: "GET",
+          url: "/match",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
 
-    return () => clearTimeout(timer);
+        console.log("Match data:", data);
+
+        navigate("/match", { state: { matchData: data } });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response?.data?.message || "Something went wrong!",
+        });
+        navigate(-1); // go back if failed
+      }
+    }
+
+    fetchData();
   }, [navigate]);
 
   return (
