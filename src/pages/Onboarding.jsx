@@ -92,7 +92,7 @@ export default function Onboarding() {
           {onboardingData.map((_, index) => (
             <div
               key={index}
-              className={`w-10 h-1 rounded-sm transition-colors ${
+              className={`w-2 h-2 rounded-sm transition-colors ${
                 currentSlide === index ? "bg-pink-500" : "bg-gray-200"
               }`}
             />
