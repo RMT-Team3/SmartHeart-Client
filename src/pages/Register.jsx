@@ -1,6 +1,11 @@
 import React from "react";
-
+import { useNavigate } from "react-router";
 export default function Register() {
+  const navigate = useNavigate();
+  function handleSubmit() {
+    localStorage.setItem("access_token", "123456789");
+    navigate("/about");
+  }
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
       <div className="w-full max-w-md space-y-8">
@@ -32,7 +37,7 @@ export default function Register() {
             <p className="text-sm mt-2 text-gray-400">Register to continue</p>
           </div>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-6 mb-3">
               <div>
                 <label

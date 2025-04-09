@@ -13,7 +13,6 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Onboarding />} />
-
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
           </Route>

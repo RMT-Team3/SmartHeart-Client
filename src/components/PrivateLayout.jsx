@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router";
 export default function PrivateLayout() {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("access_token");
   if (!accessToken) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return <Outlet />;
 }
