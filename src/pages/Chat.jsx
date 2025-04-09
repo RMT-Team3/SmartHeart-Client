@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
 import dummy from "../assets/dummy.jpg"; // Import the dummy image
+import socket from "../config/socket";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -10,13 +11,13 @@ export default function Chat() {
     {
       id: 1,
       sender: "them",
-      text: "Do you want starbucks? 😊",
+      text: "Do you want starbucks? 😊"
     },
     {
       id: 2,
       sender: "you",
-      text: "That would be awesome!",
-    },
+      text: "That would be awesome!"
+    }
   ];
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -24,10 +25,31 @@ export default function Chat() {
   };
   const handleSend = () => {
     if (message.trim()) {
+      // Emit the message to the server
+      socket.emit("chat message", message);
+
       console.log("Sending message:", message);
       setMessage("");
     }
   };
+
+  // console.log(socket);
+
+  useEffect(() => {
+    // socket.disconnect().connect();
+    socket.on("onlineUsers", (users) => {
+      console.log("Online users:", users);
+    });
+
+    socket.on("chat message", (msg) => {
+      console.log("Received message:", msg);
+    });
+
+    return () => {
+      socket.off("chat message");
+      socket.off("onlineUsers");
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -75,7 +97,10 @@ export default function Chat() {
       </div>
 
       <div className="bg-white p-3 border-t border-gray-200">
-        <div className="flex items-center gap-2">
+        <form
+          className="flex items-center gap-2"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             type="text"
             value={message}
@@ -89,7 +114,7 @@ export default function Chat() {
           >
             <Send className="w-5 h-5 text-pink-500" />
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
