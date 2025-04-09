@@ -6,6 +6,8 @@ import AboutYou from "./pages/AboutYou";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
+import Searching from "./pages/Searching";
+import Match from "./pages/Match";
 function App() {
   return (
     <div className="flex justify-center items-center w-full h-screen bg-gray-100">
@@ -13,12 +15,13 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Onboarding />} />
-
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
           </Route>
           <Route element={<PrivateLayout />}>
             <Route path="/about" element={<AboutYou />} />
+            <Route path="/search" element={<Searching />} />
+            <Route path="/match" element={<Match />} />
             <Route path="/chat" element={<Chat />} />
           </Route>
         </Routes>
