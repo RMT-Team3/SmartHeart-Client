@@ -17,7 +17,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
