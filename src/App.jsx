@@ -24,7 +24,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<Searching />} />
             <Route path="/match" element={<Match />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:id" element={<Chat />} />
           </Route>
         </Routes>
       </div>

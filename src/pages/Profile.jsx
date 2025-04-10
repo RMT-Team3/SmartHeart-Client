@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import { Mars, Venus } from "lucide-react";
+import { Mars, Venus, LogOut } from "lucide-react";
 import { useNavigate } from "react-router";
 import dummy2 from "../assets/dummy2.jpg";
-import Swal from "sweetalert2";
+
 import { UserContext } from "../context/user";
 export default function Profile() {
   const { user, fetchUser } = useContext(UserContext);
@@ -11,8 +11,17 @@ export default function Profile() {
   function handleSearch() {
     navigate("/search");
   }
+
   function handleChat() {
-    navigate("/chat");
+    const roomId = localStorage.getItem("roomId");
+    if (roomId) {
+      navigate(`/chat/${roomId}`);
+    }
+  }
+
+  function handleLogout() {
+    localStorage.clear();
+    navigate("/");
   }
 
   useEffect(() => {
@@ -20,7 +29,16 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white relative">
+      <div className="absolute top-4 right-4 z-10">
+        <button
+          onClick={handleLogout}
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gray-100/80 text-gray-700 rounded-full hover:bg-gray-200 transition"
+        >
+          Logout
+        </button>
+      </div>
+
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
@@ -42,6 +60,7 @@ export default function Profile() {
               {user?.gender}
             </p>
           </div>
+
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
           <div className="mb-8">
@@ -52,7 +71,7 @@ export default function Profile() {
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
           <div>
-            <h2 className="text-lg font-semibold text-black mb-4 ">Interest</h2>
+            <h2 className="text-lg font-semibold text-black mb-4">Interest</h2>
             <div className="grid grid-cols-2 gap-2">
               {user?.interests?.map((interest, index) => (
                 <div

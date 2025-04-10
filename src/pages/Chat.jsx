@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
-import dummy from "../assets/dummy.jpg"; // Import the dummy image
-import socket from "../config/socket";
+import dummy from "../assets/dummy.jpg";
+import { io } from "socket.io-client";
 
 export default function Chat() {
+  const socket = io("http://localhost:3000");
+  console.log(socket);
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const messages = [
     {
       id: 1,
       sender: "them",
-      text: "Do you want starbucks? 😊"
+      text: "Do you want starbucks? 😊",
     },
     {
       id: 2,
       sender: "you",
-      text: "That would be awesome!"
-    }
+      text: "That would be awesome!",
+    },
   ];
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    navigate("/");
+    navigate("/profile");
   };
   const handleSend = () => {
     if (message.trim()) {
       // Emit the message to the server
       socket.emit("chat message", message);
-
       console.log("Sending message:", message);
       setMessage("");
     }
@@ -68,7 +68,7 @@ export default function Chat() {
           </div>
         </div>
         <button className="cursor-pointer" onClick={handleLogout}>
-          Logout
+          My profile
         </button>
       </div>
 
