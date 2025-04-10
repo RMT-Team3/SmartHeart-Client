@@ -22,7 +22,6 @@ export default function Chat() {
   //     text: "That would be awesome!",
   //   },
   // ];
-
   const handleProfile = () => {
     navigate("/profile");
   };
