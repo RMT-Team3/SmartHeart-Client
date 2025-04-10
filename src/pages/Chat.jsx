@@ -9,6 +9,8 @@ export default function Chat() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [senderId, setSenderId] = useState(null);
+
   localStorage.setItem("roomId", id);
   // const messages = [
   //   {
@@ -29,10 +31,11 @@ export default function Chat() {
     if (newMessage.trim()) {
       const message = {
         roomId: id, // Contoh roomId
-        senderId: localStorage.getItem("userId"), // Contoh senderId
-        content: newMessage,
+        senderId: senderId, // Contoh senderId
+        content: newMessage
       };
 
+      // console.log("Sender ID di handleSend:", message.senderId);
       // Emit pesan ke server
       socket.emit("newChat", message);
       setNewMessage("");
@@ -42,6 +45,9 @@ export default function Chat() {
   // console.log(socket);
 
   useEffect(() => {
+    setSenderId(localStorage.getItem("userId"));
+    // console.log(senderId, "Sender ID di useEffect");
+
     socket.emit("joinRoom", id); // Emit event joinRoom dengan roomId
     // socket.disconnect().connect();
     socket.on("onlineUsers", (users) => {
@@ -70,7 +76,7 @@ export default function Chat() {
       socket.off("newChat");
       socket.off("previousMessages");
     };
-  }, [id]);
+  }, [id, senderId]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
