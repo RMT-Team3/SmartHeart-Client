@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import dummy2 from "../assets/dummy2.jpg";
 
 import { UserContext } from "../context/user";
+import socket from "../config/socket";
 export default function Profile() {
   const { user, fetchUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -23,9 +24,11 @@ export default function Profile() {
     localStorage.clear();
     navigate("/");
   }
-
   useEffect(() => {
     fetchUser();
+    socket.on("foundMatch:" + localStorage.getItem("userId"), (data) => {
+      navigate(`/chat/${data.roomId}`);
+    });
   }, []);
 
   return (
