@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Mars, Venus } from "lucide-react";
 import { useNavigate } from "react-router";
 import dummy2 from "../assets/dummy2.jpg";
-import http from "../http";
 import Swal from "sweetalert2";
-
+import { UserContext } from "../context/user";
 export default function Profile() {
-  const [user, setUser] = useState(null);
+  const { user, fetchUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   function handleSearch() {
@@ -15,35 +14,17 @@ export default function Profile() {
   function handleChat() {
     navigate("/chat");
   }
-  async function fetchUser() {
-    try {
-      const { data } = await http({
-        method: "GET",
-        url: "/profile",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-      setUser(data);
-      console.log(data);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response?.data?.message || "Something went wrong!",
-      });
-    }
-  }
+
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <div className="flex-1 overflow-y-auto">
         <div className="relative">
           <img
-            src={user?.imageUrl || dummy2} // Use user image or fallback to dummy image
+            src={user?.imageUrl || dummy2}
             alt={user?.name || "User"}
             className="w-full h-[380px] object-cover rounded-b-3xl"
           />
