@@ -20,9 +20,8 @@ export default function Chat() {
       text: "That would be awesome!",
     },
   ];
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    navigate("/");
+  const handleProfile = () => {
+    navigate("/profile");
   };
   const handleSend = () => {
     if (newMessage.trim()) {
@@ -80,8 +79,8 @@ export default function Chat() {
             </div>
           </div>
         </div>
-        <button className="cursor-pointer" onClick={handleLogout}>
-          Logout
+        <button className="cursor-pointer" onClick={handleProfile}>
+          My Profile
         </button>
       </div>
 

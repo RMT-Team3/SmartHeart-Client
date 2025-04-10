@@ -5,7 +5,6 @@ import dummy from "../assets/dummy.jpg";
 import { useLocation } from "react-router";
 import http from "../http";
 import Swal from "sweetalert2";
-
 export default function Match() {
   const location = useLocation();
   const matchData = location.state?.matchData;
@@ -13,17 +12,16 @@ export default function Match() {
   console.log(matchData);
   async function handleChat() {
     try {
-      await http({
+      const { data } = await http({
         method: "POST",
         url: "/rooms",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      // ini nanti jadi /chat/id (pake roomId)
-      navigate("/chat");
+      navigate(`/chat/${data.room.id}`);
+      localStorage.setItem("roomId", data.room.id);
     } catch (error) {
-      // ini walaupun error tetep ke chat berdasarkan roomId
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -64,7 +62,6 @@ export default function Match() {
 
           <div className="h-px bg-gray-200 w-full mb-6"></div>
 
-          {/* Interests section */}
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-black mb-4">Interest</h2>
             <div className="grid grid-cols-2 gap-2">
