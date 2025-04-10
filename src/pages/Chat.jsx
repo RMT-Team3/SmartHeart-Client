@@ -1,39 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Send } from "lucide-react";
-import { useNavigate } from "react-router";
-import dummy from "../assets/dummy.jpg"; // Import the dummy image
+import { useNavigate, useParams } from "react-router";
+import icon from "../assets/icon.png";
 import socket from "../config/socket";
 
 export default function Chat() {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const messages = [
-    {
-      id: 1,
-      sender: "them",
-      text: "Do you want starbucks? 😊",
-    },
-    {
-      id: 2,
-      sender: "you",
-      text: "That would be awesome!",
-    },
-  ];
+  localStorage.setItem("roomId", id);
+  // const messages = [
+  //   {
+  //     id: 1,
+  //     sender: "them",
+  //     text: "Do you want starbucks? 😊",
+  //   },
+  //   {
+  //     id: 2,
+  //     sender: "you",
+  //     text: "That would be awesome!",
+  //   },
+  // ];
+
   const handleProfile = () => {
     navigate("/profile");
   };
   const handleSend = () => {
     if (newMessage.trim()) {
       const message = {
-        roomId: 3, // Contoh roomId
-        senderId: 4, // Contoh senderId
+        roomId: id, // Contoh roomId
+        senderId: localStorage.getItem("userId"), // Contoh senderId
         content: newMessage,
       };
 
       // Emit pesan ke server
       socket.emit("newChat", message);
-
       setNewMessage("");
     }
   };
@@ -41,27 +43,35 @@ export default function Chat() {
   // console.log(socket);
 
   useEffect(() => {
+    socket.emit("joinRoom", id); // Emit event joinRoom dengan roomId
     // socket.disconnect().connect();
     socket.on("onlineUsers", (users) => {
       console.log("Online users:", users);
     });
 
-    socket.on("chat message", (msg) => {
-      console.log("Received message:", msg);
-      setMessage(msg.text); // Update the message state with the received message
-    });
+    // socket.on("chat message", (msg) => {
+    //   console.log("Received message:", msg);
+    //   setMessage(msg.text); // Update the message state with the received message
+    // });
 
     socket.on("newChat", (msg) => {
       console.log("New chat message:", msg);
-      setNewMessage(msg.text); // Update the message state with the new chat message
+      // setNewMessage(msg.content); // Update the message state with the new chat message
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+    socket.on("previousMessages", (msg) => {
+      // console.log("New chat message:", msg);
+      // setNewMessage(msg.content); // Update the message state with the new chat message
+      setMessages(msg);
     });
 
     return () => {
       socket.off("chat message");
       socket.off("onlineUsers");
       socket.off("newChat");
+      socket.off("previousMessages");
     };
-  }, []);
+  }, [id]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -69,13 +79,13 @@ export default function Chat() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <img
-              src={dummy}
+              src={icon}
               alt="User"
               className="w-10 h-10 rounded-full object-cover bg-pink-300 flex items-center justify-center text-white font-bold"
             />
 
             <div>
-              <h2 className="font-semibold text-gray-900">Perry Kate</h2>
+              <h2 className="font-semibold text-gray-900">Your Match</h2>
             </div>
           </div>
         </div>
@@ -86,21 +96,20 @@ export default function Chat() {
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => {
+          const isYou = msg.senderId == localStorage.getItem("userId");
           return (
             <div key={msg.id} className="space-y-2">
               <div
-                className={`flex ${
-                  msg.sender === "you" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${isYou ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${
-                    msg.sender === "you"
+                    isYou
                       ? "bg-pink-500 text-white rounded-br-none"
                       : "bg-white text-gray-800 rounded-bl-none border border-gray-200"
                   }`}
                 >
-                  <p>{msg.text}</p>
+                  <p>{msg.content}</p>
                 </div>
               </div>
             </div>

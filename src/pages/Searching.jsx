@@ -18,7 +18,6 @@ export default function Searching() {
         });
 
         console.log("Match data:", data);
-
         navigate("/match", { state: { matchData: data } });
       } catch (error) {
         Swal.fire({

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronLeft, Venus, Mars } from "lucide-react";
 import { useNavigate } from "react-router";
 import dummy from "../assets/dummy.jpg";
 import { useLocation } from "react-router";
 import http from "../http";
 import Swal from "sweetalert2";
+import socket from "../config/socket";
 export default function Match() {
   const location = useLocation();
   const matchData = location.state?.matchData;
@@ -21,6 +22,12 @@ export default function Match() {
       });
       navigate(`/chat/${data.room.id}`);
       localStorage.setItem("roomId", data.room.id);
+      socket.emit("foundMatch", {
+        userId: localStorage.getItem("userId"),
+        roomId: data.room.id,
+        matchId: data.room.user2.id,
+      });
+      localStorage.setItem("matchId", data.room.user2.id);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -29,6 +36,12 @@ export default function Match() {
       });
     }
   }
+  useEffect(() => {
+    socket.on("foundMatch:" + localStorage.getItem("userId"), (data) => {
+      console.log("foundMatch", data);
+      navigate(`/chat/${data.roomId}`);
+    });
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">

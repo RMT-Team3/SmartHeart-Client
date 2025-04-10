@@ -30,6 +30,7 @@ export default function Login() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
+      localStorage.setItem("userId", user.data.id);
       if (user.data.personalities) {
         navigate("/profile");
       } else {
