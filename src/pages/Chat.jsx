@@ -7,29 +7,35 @@ import socket from "../config/socket";
 export default function Chat() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const [newMessage, setNewMessage] = useState("");
   const messages = [
     {
       id: 1,
       sender: "them",
-      text: "Do you want starbucks? 😊"
+      text: "Do you want starbucks? 😊",
     },
     {
       id: 2,
       sender: "you",
-      text: "That would be awesome!"
-    }
+      text: "That would be awesome!",
+    },
   ];
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     navigate("/");
   };
   const handleSend = () => {
-    if (message.trim()) {
-      // Emit the message to the server
-      socket.emit("chat message", message);
+    if (newMessage.trim()) {
+      const message = {
+        roomId: 3, // Contoh roomId
+        senderId: 4, // Contoh senderId
+        content: newMessage,
+      };
 
-      console.log("Sending message:", message);
-      setMessage("");
+      // Emit pesan ke server
+      socket.emit("newChat", message);
+
+      setNewMessage("");
     }
   };
 
@@ -43,11 +49,18 @@ export default function Chat() {
 
     socket.on("chat message", (msg) => {
       console.log("Received message:", msg);
+      setMessage(msg.text); // Update the message state with the received message
+    });
+
+    socket.on("newChat", (msg) => {
+      console.log("New chat message:", msg);
+      setNewMessage(msg.text); // Update the message state with the new chat message
     });
 
     return () => {
       socket.off("chat message");
       socket.off("onlineUsers");
+      socket.off("newChat");
     };
   }, []);
 
@@ -99,12 +112,15 @@ export default function Chat() {
       <div className="bg-white p-3 border-t border-gray-200">
         <form
           className="flex items-center gap-2"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            socket.emit("chat message", newMessage);
+          }}
         >
           <input
             type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type something..."
             className="flex-1 border border-gray-200 rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-pink-500"
           />
