@@ -21,7 +21,6 @@ export function ProfileProvider(props) {
         },
       });
       setUser(data);
-      console.log("User data fetched:", data);
     } catch (error) {
       Swal.fire({
         icon: "error",
